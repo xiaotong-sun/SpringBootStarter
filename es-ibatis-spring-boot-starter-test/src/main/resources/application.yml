@@ -1,0 +1,7 @@
+server:
+  port: 8081
+
+es-ibatis:
+  address: jdbc:es://http://127.0.0.1:9200
+  base-package: cn.bugstack.middleware.test.infrastructure.dao
+  mappers: mapper/User_Mapper.xml

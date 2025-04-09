@@ -1,0 +1,11 @@
+server:
+  port: 8081
+
+# mybatis
+mybatis:
+  datasource:
+    username: root
+    password: 1234
+    url: jdbc:mysql://127.0.0.1:3306/bugstack?useUnicode=true
+    driver: com.mysql.jdbc.Driver
+    basePackage: cn.bugstack.middleware.mybatis.spring.test.dao

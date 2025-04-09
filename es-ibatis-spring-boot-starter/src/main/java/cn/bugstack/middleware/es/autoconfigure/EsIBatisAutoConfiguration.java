@@ -1,0 +1,75 @@
+package cn.bugstack.middleware.es.autoconfigure;
+
+import cn.bugstack.middleware.es.ibatis.SqlSessionFactory;
+import cn.bugstack.middleware.es.ibatis.SqlSessionFactoryBuilder;
+import cn.bugstack.middleware.es.spring.MapperFactoryBean;
+import cn.bugstack.middleware.es.spring.MapperScannerConfigurer;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.EnvironmentAware;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
+import org.springframework.core.env.Environment;
+import org.springframework.core.type.AnnotationMetadata;
+
+import javax.annotation.Resource;
+
+/**
+ * 博客：https://bugstack.cn - 沉淀、分享、成长，让自己和他人都能有所收获！
+ * 公众号：bugstack虫洞栈
+ * Create by 小傅哥(fustack)
+ */
+@Configuration
+@ConditionalOnClass({SqlSessionFactory.class})
+@EnableConfigurationProperties(ESIBatisProperties.class)
+public class EsIBatisAutoConfiguration implements InitializingBean {
+
+    @Resource
+    private ESIBatisProperties esiBatisProperties;
+
+    @Bean(name = "esSqlSessionFactory")
+    @ConditionalOnMissingBean
+    public SqlSessionFactory sqlSessionFactory() throws Exception {
+        return new SqlSessionFactoryBuilder().build(esiBatisProperties);
+    }
+
+    public static class AutoConfiguredMapperScannerRegistrar implements EnvironmentAware, ImportBeanDefinitionRegistrar {
+
+        private String basePackage;
+
+        @Override
+        public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
+            BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(MapperScannerConfigurer.class);
+            builder.addPropertyValue("basePackage", basePackage);
+            registry.registerBeanDefinition(MapperScannerConfigurer.class.getName(), builder.getBeanDefinition());
+        }
+
+        @Override
+        public void setEnvironment(Environment environment) {
+            this.basePackage = environment.getProperty("es-ibatis.base-package");
+        }
+
+    }
+
+    @Configuration
+    @Import(AutoConfiguredMapperScannerRegistrar.class)
+    @ConditionalOnMissingBean({MapperFactoryBean.class, MapperScannerConfigurer.class})
+    public static class MapperScannerRegistrarNotFoundConfiguration implements InitializingBean {
+
+        @Override
+        public void afterPropertiesSet() {
+        }
+
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+
+    }
+}

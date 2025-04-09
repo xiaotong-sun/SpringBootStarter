@@ -1,0 +1,37 @@
+<idea-plugin>
+  <id>CodeProbeArk</id>
+  <name>CodeProbeArk</name>
+  <version>1.0</version>
+  <vendor email="184172133@qq.com" url="https://bugstack.cn/">小傅哥</vendor>
+
+  <description><![CDATA[ 如何保证代码质量？此插件采集研发在开发过程中的执行动作，把风险判断提前。实际操作举例就是，`当你开发完成一个接口，开始测试运行时`，我们的插件就可以采集到这个接口的全部信息，包括：接口名称、入参类型和内容、出参类型和内容、异常信息、调用关系链等。而再把这些信息汇总提交到服务端，生成本次需求代码分支下的全部接口动作，以及各系统间的关系链路，并附带随时生成最新的接口文档和一键测试验证功能。]]></description>
+
+  <change-notes><![CDATA[
+      探针装置信息.<br>
+      <em>1.0</em>
+      <em>配置基础采集功能</em>
+      <em>记录方法执行时间 </em>
+      <em>记录方法入参类型和内容 </em>
+      <em>记录方法出参类型和内容 </em>
+      <em>记录异常信息 </em>
+    ]]>
+  </change-notes>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+  <idea-version since-build="173.0"/>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+       on how to target different products -->
+  <depends>com.intellij.modules.platform</depends>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <!-- Add your extensions here -->
+    <executor implementation="cn.bugstack.middleware.plugin.ark.executor.RunExecutor"/>
+    <programRunner implementation="cn.bugstack.middleware.plugin.ark.runner.RunCodeRunner"/>
+  </extensions>
+
+  <actions>
+    <!-- Add your actions here -->
+  </actions>
+
+</idea-plugin>
