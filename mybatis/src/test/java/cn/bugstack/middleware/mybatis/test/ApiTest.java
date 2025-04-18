@@ -11,11 +11,6 @@ import org.junit.Test;
 import java.io.Reader;
 import java.util.List;
 
-/**
- * 博客：https://bugstack.cn - 沉淀、分享、成长，让自己和他人都能有所收获！
- * 公众号：bugstack虫洞栈
- * Create by 小傅哥(fustack)
- */
 public class ApiTest {
 
     @Test
@@ -52,7 +47,8 @@ public class ApiTest {
             try {
                 User req = new User();
                 req.setUserNickName("");
-                List<User> userList = session.selectList("cn.bugstack.middleware.mybatis.test.dao.IUserDao.queryUserList", req);
+                List<User> userList = session
+                        .selectList("cn.bugstack.middleware.mybatis.test.dao.IUserDao.queryUserList", req);
                 System.out.println(JSON.toJSONString(userList));
             } finally {
                 session.close();
@@ -62,7 +58,5 @@ public class ApiTest {
             e.printStackTrace();
         }
     }
-
-
 
 }

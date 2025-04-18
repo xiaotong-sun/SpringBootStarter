@@ -15,11 +15,6 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 
-/**
- * 博客：https://bugstack.cn - 沉淀、分享、成长，让自己和他人都能有所收获！
- * 公众号：bugstack虫洞栈
- * Create by 小傅哥(fustack)
- */
 @Aspect
 @Component
 public class DoMethodExtPoint {
@@ -43,7 +38,8 @@ public class DoMethodExtPoint {
 
         // 判断方法返回类型
         if (!returnType.getName().equals("boolean")) {
-            throw new RuntimeException("annotation @DoMethodExt set method：" + methodName + " returnType is not boolean");
+            throw new RuntimeException(
+                    "annotation @DoMethodExt set method：" + methodName + " returnType is not boolean");
         }
         // 拦截判断正常，继续
         boolean invoke = (boolean) methodExt.invoke(jp.getThis(), jp.getArgs());

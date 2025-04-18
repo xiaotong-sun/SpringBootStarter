@@ -2,11 +2,6 @@ package cn.bugstack.middleware.mybatis;
 
 import java.util.Map;
 
-/**
- * 公众号 | bugstack虫洞栈
- * 博 客 | https://bugstack.cn
- * Create by 小傅哥
- */
 public class XNode {
 
     private String namespace;

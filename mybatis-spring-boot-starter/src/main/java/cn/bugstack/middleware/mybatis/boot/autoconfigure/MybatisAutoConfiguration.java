@@ -22,19 +22,15 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-/**
- * 博客：https://bugstack.cn - 沉淀、分享、成长，让自己和他人都能有所收获！
- * 公众号：bugstack虫洞栈
- * Create by 小傅哥(fustack)
- */
 @Configuration
-@ConditionalOnClass({SqlSessionFactory.class})
+@ConditionalOnClass({ SqlSessionFactory.class })
 @EnableConfigurationProperties(MybatisProperties.class)
 public class MybatisAutoConfiguration implements InitializingBean {
 
     @Bean
     @ConditionalOnMissingBean
-    public SqlSessionFactory sqlSessionFactory(Connection connection, MybatisProperties mybatisProperties) throws Exception {
+    public SqlSessionFactory sqlSessionFactory(Connection connection, MybatisProperties mybatisProperties)
+            throws Exception {
         return new SqlSessionFactoryBuilder().build(connection, mybatisProperties.getMapperLocations());
     }
 
@@ -43,19 +39,22 @@ public class MybatisAutoConfiguration implements InitializingBean {
     public Connection connection(MybatisProperties mybatisProperties) {
         try {
             Class.forName(mybatisProperties.getDriver());
-            return DriverManager.getConnection(mybatisProperties.getUrl(), mybatisProperties.getUsername(), mybatisProperties.getPassword());
+            return DriverManager.getConnection(mybatisProperties.getUrl(), mybatisProperties.getUsername(),
+                    mybatisProperties.getPassword());
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public static class AutoConfiguredMapperScannerRegistrar implements EnvironmentAware, ImportBeanDefinitionRegistrar {
+    public static class AutoConfiguredMapperScannerRegistrar
+            implements EnvironmentAware, ImportBeanDefinitionRegistrar {
 
         private String basePackage;
 
         @Override
-        public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
+        public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata,
+                BeanDefinitionRegistry registry) {
             BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(MapperScannerConfigurer.class);
             builder.addPropertyValue("basePackage", basePackage);
             registry.registerBeanDefinition(MapperScannerConfigurer.class.getName(), builder.getBeanDefinition());
@@ -69,7 +68,7 @@ public class MybatisAutoConfiguration implements InitializingBean {
 
     @Configuration
     @Import(AutoConfiguredMapperScannerRegistrar.class)
-    @ConditionalOnMissingBean({MapperFactoryBean.class, MapperScannerConfigurer.class})
+    @ConditionalOnMissingBean({ MapperFactoryBean.class, MapperScannerConfigurer.class })
     public static class MapperScannerRegistrarNotFoundConfiguration implements InitializingBean {
 
         @Override

@@ -32,12 +32,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static cn.bugstack.middleware.schedule.common.Constants.Global.*;
 
-/**
- * 博  客：http://bugstack.cn
- * 公众号：bugstack虫洞栈 | 沉淀、分享、成长，让自己和他人都能有所收获！
- * create by 小傅哥
- */
-public class DcsSchedulingConfiguration implements ApplicationContextAware, BeanPostProcessor, ApplicationListener<ContextRefreshedEvent> {
+public class DcsSchedulingConfiguration
+        implements ApplicationContextAware, BeanPostProcessor, ApplicationListener<ContextRefreshedEvent> {
 
     private Logger logger = LoggerFactory.getLogger(DcsSchedulingConfiguration.class);
 
@@ -51,11 +47,13 @@ public class DcsSchedulingConfiguration implements ApplicationContextAware, Bean
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         Class<?> targetClass = AopProxyUtils.ultimateTargetClass(bean);
-        if (this.nonAnnotatedClasses.contains(targetClass)) return bean;
+        if (this.nonAnnotatedClasses.contains(targetClass))
+            return bean;
         Method[] methods = ReflectionUtils.getAllDeclaredMethods(bean.getClass());
         for (Method method : methods) {
             DcsScheduled dcsScheduled = AnnotationUtils.findAnnotation(method, DcsScheduled.class);
-            if (null == dcsScheduled || 0 == method.getDeclaredAnnotations().length) continue;
+            if (null == dcsScheduled || 0 == method.getDeclaredAnnotations().length)
+                continue;
             List<ExecOrder> execOrderList = Constants.execOrderMap.computeIfAbsent(beanName, k -> new ArrayList<>());
             ExecOrder execOrder = new ExecOrder();
             execOrder.setBean(bean);
@@ -74,15 +72,15 @@ public class DcsSchedulingConfiguration implements ApplicationContextAware, Bean
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         try {
             ApplicationContext applicationContext = contextRefreshedEvent.getApplicationContext();
-            //1. 初始化配置
+            // 1. 初始化配置
             init_config(applicationContext);
-            //2. 初始化服务
+            // 2. 初始化服务
             init_server(applicationContext);
-            //3. 启动任务
+            // 3. 启动任务
             init_task(applicationContext);
-            //4. 挂载节点
+            // 4. 挂载节点
             init_node();
-            //5. 心跳监听
+            // 5. 心跳监听
             HeartbeatService.getInstance().startFlushScheduleStatus();
             logger.info("middleware schedule init config、server、task、node、heart done!");
         } catch (Exception e) {
@@ -90,10 +88,11 @@ public class DcsSchedulingConfiguration implements ApplicationContextAware, Bean
         }
     }
 
-    //1. 初始化配置
+    // 1. 初始化配置
     private void init_config(ApplicationContext applicationContext) {
         try {
-            StarterServiceProperties properties = applicationContext.getBean("bugstack-middlware-schedule-starterAutoConfig", StarterAutoConfig.class).getProperties();
+            StarterServiceProperties properties = applicationContext
+                    .getBean("bugstack-middlware-schedule-starterAutoConfig", StarterAutoConfig.class).getProperties();
             Constants.Global.zkAddress = properties.getZkAddress();
             Constants.Global.schedulerServerId = properties.getSchedulerServerId();
             Constants.Global.schedulerServerName = properties.getSchedulerServerName();
@@ -105,19 +104,19 @@ public class DcsSchedulingConfiguration implements ApplicationContextAware, Bean
         }
     }
 
-    //2. 初始化服务
+    // 2. 初始化服务
     private void init_server(ApplicationContext applicationContext) {
         try {
-            //获取zk连接
+            // 获取zk连接
             CuratorFramework client = ZkCuratorServer.getClient(Constants.Global.zkAddress);
-            //节点组装
+            // 节点组装
             path_root_server = StrUtil.joinStr(path_root, LINE, "server", LINE, schedulerServerId);
             path_root_server_ip = StrUtil.joinStr(path_root_server, LINE, "ip", LINE, Constants.Global.ip);
-            //创建节点&递归删除本服务IP下的旧内容
+            // 创建节点&递归删除本服务IP下的旧内容
             ZkCuratorServer.deletingChildrenIfNeeded(client, path_root_server_ip);
             ZkCuratorServer.createNode(client, path_root_server_ip);
             ZkCuratorServer.setData(client, path_root_server, schedulerServerName);
-            //添加节点&监听
+            // 添加节点&监听
             ZkCuratorServer.createNodeSimple(client, Constants.Global.path_root_exec);
             ZkCuratorServer.addTreeCacheListener(applicationContext, client, Constants.Global.path_root_exec);
         } catch (Exception e) {
@@ -126,37 +125,45 @@ public class DcsSchedulingConfiguration implements ApplicationContextAware, Bean
         }
     }
 
-    //3. 启动任务
+    // 3. 启动任务
     private void init_task(ApplicationContext applicationContext) {
-        CronTaskRegister cronTaskRegistrar = applicationContext.getBean("bugstack-middlware-schedule-cronTaskRegister", CronTaskRegister.class);
+        CronTaskRegister cronTaskRegistrar = applicationContext.getBean("bugstack-middlware-schedule-cronTaskRegister",
+                CronTaskRegister.class);
         Set<String> beanNames = Constants.execOrderMap.keySet();
         for (String beanName : beanNames) {
             List<ExecOrder> execOrderList = Constants.execOrderMap.get(beanName);
             for (ExecOrder execOrder : execOrderList) {
-                if (!execOrder.getAutoStartup()) continue;
-                SchedulingRunnable task = new SchedulingRunnable(execOrder.getBean(), execOrder.getBeanName(), execOrder.getMethodName());
+                if (!execOrder.getAutoStartup())
+                    continue;
+                SchedulingRunnable task = new SchedulingRunnable(execOrder.getBean(), execOrder.getBeanName(),
+                        execOrder.getMethodName());
                 cronTaskRegistrar.addCronTask(task, execOrder.getCron());
             }
         }
     }
 
-    //4. 挂载节点
+    // 4. 挂载节点
     private void init_node() throws Exception {
         Set<String> beanNames = Constants.execOrderMap.keySet();
         for (String beanName : beanNames) {
             List<ExecOrder> execOrderList = Constants.execOrderMap.get(beanName);
             for (ExecOrder execOrder : execOrderList) {
-                String path_root_server_ip_clazz = StrUtil.joinStr(path_root_server_ip, LINE, "clazz", LINE, execOrder.getBeanName());
-                String path_root_server_ip_clazz_method = StrUtil.joinStr(path_root_server_ip_clazz, LINE, "method", LINE, execOrder.getMethodName());
-                String path_root_server_ip_clazz_method_status = StrUtil.joinStr(path_root_server_ip_clazz, LINE, "method", LINE, execOrder.getMethodName(), "/status");
-                //添加节点
+                String path_root_server_ip_clazz = StrUtil.joinStr(path_root_server_ip, LINE, "clazz", LINE,
+                        execOrder.getBeanName());
+                String path_root_server_ip_clazz_method = StrUtil.joinStr(path_root_server_ip_clazz, LINE, "method",
+                        LINE, execOrder.getMethodName());
+                String path_root_server_ip_clazz_method_status = StrUtil.joinStr(path_root_server_ip_clazz, LINE,
+                        "method", LINE, execOrder.getMethodName(), "/status");
+                // 添加节点
                 ZkCuratorServer.createNodeSimple(client, path_root_server_ip_clazz);
                 ZkCuratorServer.createNodeSimple(client, path_root_server_ip_clazz_method);
                 ZkCuratorServer.createNodeSimple(client, path_root_server_ip_clazz_method_status);
-                //添加节点数据[临时]
-                ZkCuratorServer.appendPersistentData(client, path_root_server_ip_clazz_method + "/value", JSON.toJSONString(execOrder));
-                //添加节点数据[永久]
-                ZkCuratorServer.setData(client, path_root_server_ip_clazz_method_status, execOrder.getAutoStartup() ? "1" : "0");
+                // 添加节点数据[临时]
+                ZkCuratorServer.appendPersistentData(client, path_root_server_ip_clazz_method + "/value",
+                        JSON.toJSONString(execOrder));
+                // 添加节点数据[永久]
+                ZkCuratorServer.setData(client, path_root_server_ip_clazz_method_status,
+                        execOrder.getAutoStartup() ? "1" : "0");
             }
         }
     }

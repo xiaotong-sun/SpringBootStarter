@@ -10,11 +10,6 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-/**
- * 博  客：http://bugstack.cn
- * 公众号：bugstack虫洞栈 | 沉淀、分享、成长，让自己和他人都能有所收获！
- * create by 小傅哥
- */
 public class SyncWrite {
 
     public Response writeAndSync(final Channel channel, final Request request, final long timeout) throws Exception {
@@ -41,13 +36,14 @@ public class SyncWrite {
         return response;
     }
 
-    private Response doWriteAndSync(final Channel channel, final Request request, final long timeout, final WriteFuture<Response> writeFuture) throws Exception {
+    private Response doWriteAndSync(final Channel channel, final Request request, final long timeout,
+            final WriteFuture<Response> writeFuture) throws Exception {
 
         channel.writeAndFlush(request).addListener(new ChannelFutureListener() {
             public void operationComplete(ChannelFuture future) {
                 writeFuture.setWriteResult(future.isSuccess());
                 writeFuture.setCause(future.cause());
-                //失败移除
+                // 失败移除
                 if (!writeFuture.isWriteSuccess()) {
                     SyncWriteMap.syncKey.remove(writeFuture.requestId());
                 }

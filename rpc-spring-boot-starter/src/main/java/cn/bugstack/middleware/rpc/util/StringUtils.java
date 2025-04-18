@@ -4,11 +4,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 博  客：http://bugstack.cn
- * 公众号：bugstack虫洞栈 | 沉淀、分享、成长，让自己和他人都能有所收获！
- * create by 小傅哥
- */
 public class StringUtils {
 
     /**
@@ -19,11 +14,14 @@ public class StringUtils {
     public static final String EMPTY = "";
 
     // Empty checks
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
 
     /**
-     * <p>Checks if a CharSequence is empty ("") or null.</p>
+     * <p>
+     * Checks if a CharSequence is empty ("") or null.
+     * </p>
      * <p/>
+     * 
      * <pre>
      * StringUtils.isEmpty(null)      = true
      * StringUtils.isEmpty("")        = true
@@ -32,9 +30,11 @@ public class StringUtils {
      * StringUtils.isEmpty("  bob  ") = false
      * </pre>
      * <p/>
-     * <p>NOTE: This method changed in Lang version 2.0.
+     * <p>
+     * NOTE: This method changed in Lang version 2.0.
      * It no longer trims the CharSequence.
-     * That functionality is available in isBlank().</p>
+     * That functionality is available in isBlank().
+     * </p>
      *
      * @param cs the CharSequence to check, may be null
      * @return {@code true} if the CharSequence is empty or null
@@ -45,8 +45,11 @@ public class StringUtils {
     }
 
     /**
-     * <p>Checks if a CharSequence is not empty ("") and not null.</p>
+     * <p>
+     * Checks if a CharSequence is not empty ("") and not null.
+     * </p>
      * <p/>
+     * 
      * <pre>
      * StringUtils.isNotEmpty(null)      = false
      * StringUtils.isNotEmpty("")        = false
@@ -57,15 +60,19 @@ public class StringUtils {
      *
      * @param cs the CharSequence to check, may be null
      * @return {@code true} if the CharSequence is not empty and not null
-     * @since 3.0 Changed signature from isNotEmpty(String) to isNotEmpty(CharSequence)
+     * @since 3.0 Changed signature from isNotEmpty(String) to
+     *        isNotEmpty(CharSequence)
      */
     public static boolean isNotEmpty(CharSequence cs) {
         return !StringUtils.isEmpty(cs);
     }
 
     /**
-     * <p>Checks if a CharSequence is whitespace, empty ("") or null.</p>
+     * <p>
+     * Checks if a CharSequence is whitespace, empty ("") or null.
+     * </p>
      * <p/>
+     * 
      * <pre>
      * StringUtils.isBlank(null)      = true
      * StringUtils.isBlank("")        = true
@@ -92,8 +99,11 @@ public class StringUtils {
     }
 
     /**
-     * <p>Checks if a CharSequence is not empty (""), not null and not whitespace only.</p>
+     * <p>
+     * Checks if a CharSequence is not empty (""), not null and not whitespace only.
+     * </p>
      * <p/>
+     * 
      * <pre>
      * StringUtils.isNotBlank(null)      = false
      * StringUtils.isNotBlank("")        = false
@@ -104,8 +114,9 @@ public class StringUtils {
      *
      * @param cs the CharSequence to check, may be null
      * @return {@code true} if the CharSequence is
-     * not empty and not null and not whitespace
-     * @since 3.0 Changed signature from isNotBlank(String) to isNotBlank(CharSequence)
+     *         not empty and not null and not whitespace
+     * @since 3.0 Changed signature from isNotBlank(String) to
+     *        isNotBlank(CharSequence)
      */
     public static boolean isNotBlank(CharSequence cs) {
         return !StringUtils.isBlank(cs);
@@ -138,7 +149,7 @@ public class StringUtils {
      *
      * @param str the String to be trimmed, may be null
      * @return the trimmed String,
-     * {@code null} if only chars &lt;= 32, empty or null String input
+     *         {@code null} if only chars &lt;= 32, empty or null String input
      * @since 2.0
      */
     public static String trimToNull(String str) {
@@ -163,9 +174,9 @@ public class StringUtils {
         return str == null ? EMPTY : str.trim();
     }
 
-
     /**
-     * Converts a <code>byte[]</code> to a String using the specified character encoding.
+     * Converts a <code>byte[]</code> to a String using the specified character
+     * encoding.
      *
      * @param bytes       the byte array to read from
      * @param charsetName the encoding to use, if null then use the platform default
@@ -179,12 +190,15 @@ public class StringUtils {
     }
 
     // Defaults
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
 
     /**
-     * <p>Returns either the passed in String,
-     * or if the String is {@code null}, an empty String ("").</p>
+     * <p>
+     * Returns either the passed in String,
+     * or if the String is {@code null}, an empty String ("").
+     * </p>
      * <p/>
+     * 
      * <pre>
      * StringUtils.defaultString(null)  = ""
      * StringUtils.defaultString("")    = ""
@@ -193,7 +207,7 @@ public class StringUtils {
      *
      * @param str the String to check, may be null
      * @return the passed in String, or the empty String if it
-     * was {@code null}
+     *         was {@code null}
      * @see String#valueOf(Object)
      */
     public static String defaultString(final String str) {
@@ -210,7 +224,7 @@ public class StringUtils {
      */
     public static String[] split(String src, String separator) {
         if (isEmpty(separator)) {
-            return new String[]{src};
+            return new String[] { src };
         }
         if (isEmpty(src)) {
             return new String[0];

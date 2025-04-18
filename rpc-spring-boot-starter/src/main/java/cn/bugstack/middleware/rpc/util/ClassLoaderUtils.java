@@ -5,11 +5,6 @@ import java.lang.reflect.Modifier;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * 博  客：http://bugstack.cn
- * 公众号：bugstack虫洞栈 | 沉淀、分享、成长，让自己和他人都能有所收获！
- * create by 小傅哥
- */
 public class ClassLoaderUtils {
 
     private static Set<Class> primitiveSet = new HashSet<Class>();
@@ -40,6 +35,7 @@ public class ClassLoaderUtils {
 
     /**
      * 得到当前ClassLoader
+     * 
      * @param clazz 某个类
      * @return ClassLoader
      */
@@ -62,10 +58,10 @@ public class ClassLoaderUtils {
      * 根据类名加载Class
      *
      * @param className
-     *            类名
+     *                  类名
      * @return Class
      * @throws ClassNotFoundException
-     *             找不到类
+     *                                找不到类
      */
     public static Class forName(String className)
             throws ClassNotFoundException {
@@ -76,12 +72,12 @@ public class ClassLoaderUtils {
      * 根据类名加载Class
      *
      * @param className
-     *            类名
+     *                   类名
      * @param initialize
-     *            是否初始化
+     *                   是否初始化
      * @return Class
      * @throws ClassNotFoundException
-     *             找不到类
+     *                                找不到类
      */
     public static Class forName(String className, boolean initialize)
             throws ClassNotFoundException {
@@ -92,12 +88,12 @@ public class ClassLoaderUtils {
      * 根据类名加载Class
      *
      * @param className
-     *            类名
+     *                  类名
      * @param cl
-     *            Classloader
+     *                  Classloader
      * @return Class
      * @throws ClassNotFoundException
-     *             找不到类
+     *                                找不到类
      */
     public static Class forName(String className, ClassLoader cl)
             throws ClassNotFoundException {
@@ -108,14 +104,14 @@ public class ClassLoaderUtils {
      * 实例化一个对象(只检测默认构造函数，其它不管）
      *
      * @param clazz
-     *         对象类
+     *              对象类
      * @param <T>
-     *         对象具体类
+     *              对象具体类
      * @return 对象实例
      * @throws Exception 没有找到方法，或者无法处理，或者初始化方法异常等
      */
     public static <T> T newInstance(Class<T> clazz) throws Exception {
-        if(primitiveSet.contains(clazz)){
+        if (primitiveSet.contains(clazz)) {
             return null;
         }
         if (clazz.isMemberClass() && !Modifier.isStatic(clazz.getModifiers())) {
@@ -129,11 +125,11 @@ public class ClassLoaderUtils {
             }
             if (defaultConstructor != null) {
                 if (defaultConstructor.isAccessible()) {
-                    return (T) defaultConstructor.newInstance(new Object[]{null});
+                    return (T) defaultConstructor.newInstance(new Object[] { null });
                 } else {
                     try {
                         defaultConstructor.setAccessible(true);
-                        return (T) defaultConstructor.newInstance(new Object[]{null});
+                        return (T) defaultConstructor.newInstance(new Object[] { null });
                     } finally {
                         defaultConstructor.setAccessible(false);
                     }

@@ -12,11 +12,6 @@ import javax.annotation.Resource;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 
-/**
- * 博  客：http://bugstack.cn
- * 公众号：bugstack虫洞栈 | 沉淀、分享、成长，让自己和他人都能有所收获！
- * create by 小傅哥
- */
 public class MapperFactoryBean<T> implements FactoryBean<T> {
 
     private Logger logger = LoggerFactory.getLogger(MapperFactoryBean.class);
@@ -47,7 +42,8 @@ public class MapperFactoryBean<T> implements FactoryBean<T> {
 
             return method.getReturnType().newInstance();
         };
-        return (T) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class[]{mapperInterface}, handler);
+        return (T) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
+                new Class[] { mapperInterface }, handler);
     }
 
     @Override

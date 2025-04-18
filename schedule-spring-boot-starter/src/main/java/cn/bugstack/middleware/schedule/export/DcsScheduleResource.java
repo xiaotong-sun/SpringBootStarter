@@ -14,11 +14,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static cn.bugstack.middleware.schedule.common.Constants.Global.*;
 
-/**
- * 博  客：http://bugstack.cn
- * 公众号：bugstack虫洞栈 | 沉淀、分享、成长，让自己和他人都能有所收获！
- * create by 小傅哥
- */
 public class DcsScheduleResource {
 
     private CuratorFramework client;
@@ -45,12 +40,14 @@ public class DcsScheduleResource {
 
     private String getDate(String path) throws Exception {
         byte[] bytes = client.getData().forPath(path);
-        if (null == bytes || bytes.length <= 0) return null;
+        if (null == bytes || bytes.length <= 0)
+            return null;
         return new String(bytes, CHARSET_NAME);
     }
 
     private void setData(String path, Object value) throws Exception {
-        if (null == client.checkExists().forPath(path)) return;
+        if (null == client.checkExists().forPath(path))
+            return;
         client.setData().forPath(path, JSON.toJSONString(value).getBytes(CHARSET_NAME));
     }
 
@@ -59,27 +56,38 @@ public class DcsScheduleResource {
     }
 
     private List<String> queryPathRootServerIpList(String schedulerServerId) throws Exception {
-        return getChildren(StrUtil.joinStr(path_root, Constants.Global.LINE, "server", Constants.Global.LINE, schedulerServerId, Constants.Global.LINE, "ip"));
+        return getChildren(StrUtil.joinStr(path_root, Constants.Global.LINE, "server", Constants.Global.LINE,
+                schedulerServerId, Constants.Global.LINE, "ip"));
     }
 
     private List<String> queryPathRootServerIpClazz(String schedulerServerId, String ip) throws Exception {
-        return getChildren(StrUtil.joinStr(path_root, Constants.Global.LINE, "server", Constants.Global.LINE, schedulerServerId, Constants.Global.LINE, "ip", LINE, ip, LINE, "clazz"));
+        return getChildren(StrUtil.joinStr(path_root, Constants.Global.LINE, "server", Constants.Global.LINE,
+                schedulerServerId, Constants.Global.LINE, "ip", LINE, ip, LINE, "clazz"));
     }
 
-    private List<String> queryPathRootServerIpClazzMethod(String schedulerServerId, String ip, String clazz) throws Exception {
-        return getChildren(StrUtil.joinStr(path_root, Constants.Global.LINE, "server", Constants.Global.LINE, schedulerServerId, Constants.Global.LINE, "ip", LINE, ip, LINE, "clazz", LINE, clazz, LINE, "method"));
+    private List<String> queryPathRootServerIpClazzMethod(String schedulerServerId, String ip, String clazz)
+            throws Exception {
+        return getChildren(StrUtil.joinStr(path_root, Constants.Global.LINE, "server", Constants.Global.LINE,
+                schedulerServerId, Constants.Global.LINE, "ip", LINE, ip, LINE, "clazz", LINE, clazz, LINE, "method"));
     }
 
-    private ExecOrder queryExecOrder(String schedulerServerId, String ip, String clazz, String method) throws Exception {
-        String path = StrUtil.joinStr(path_root, Constants.Global.LINE, "server", Constants.Global.LINE, schedulerServerId, Constants.Global.LINE, "ip", LINE, ip, LINE, "clazz", LINE, clazz, LINE, "method", LINE, method, LINE, "value");
-        if (null == client.checkExists().forPath(path)) return null;
+    private ExecOrder queryExecOrder(String schedulerServerId, String ip, String clazz, String method)
+            throws Exception {
+        String path = StrUtil.joinStr(path_root, Constants.Global.LINE, "server", Constants.Global.LINE,
+                schedulerServerId, Constants.Global.LINE, "ip", LINE, ip, LINE, "clazz", LINE, clazz, LINE, "method",
+                LINE, method, LINE, "value");
+        if (null == client.checkExists().forPath(path))
+            return null;
         String objJson = getDate(path);
-        if (null == objJson) return null;
+        if (null == objJson)
+            return null;
         return JSON.parseObject(objJson, ExecOrder.class);
     }
 
     private boolean queryStatus(String schedulerServerId, String ip, String clazz, String method) throws Exception {
-        String path = StrUtil.joinStr(path_root, Constants.Global.LINE, "server", Constants.Global.LINE, schedulerServerId, Constants.Global.LINE, "ip", LINE, ip, LINE, "clazz", LINE, clazz, LINE, "method", LINE, method, LINE, "status");
+        String path = StrUtil.joinStr(path_root, Constants.Global.LINE, "server", Constants.Global.LINE,
+                schedulerServerId, Constants.Global.LINE, "ip", LINE, ip, LINE, "clazz", LINE, clazz, LINE, "method",
+                LINE, method, LINE, "status");
         String statusStr = getDate(path);
         return "1".equals(statusStr);
     }
@@ -88,7 +96,7 @@ public class DcsScheduleResource {
         List<DcsScheduleInfo> dcsScheduleInfoList = new ArrayList<>();
         String path_root_server = StrUtil.joinStr(path_root, Constants.Global.LINE, "server", LINE, schedulerServerId);
         String schedulerServerName = getDate(path_root_server);
-        //查询封装结果集
+        // 查询封装结果集
         List<String> ipList = queryPathRootServerIpList(schedulerServerId);
         for (String ip : ipList) {
             List<String> clazzList = queryPathRootServerIpClazz(schedulerServerId, ip);
@@ -96,7 +104,7 @@ public class DcsScheduleResource {
                 List<String> methodList = queryPathRootServerIpClazzMethod(schedulerServerId, ip, clazz);
                 for (String method : methodList) {
                     ExecOrder execOrder = queryExecOrder(schedulerServerId, ip, clazz, method);
-                    //封装对象
+                    // 封装对象
                     DcsScheduleInfo dcsScheduleInfo = new DcsScheduleInfo();
                     dcsScheduleInfo.setIp(ip);
                     dcsScheduleInfo.setSchedulerServerId(schedulerServerId);
@@ -119,7 +127,8 @@ public class DcsScheduleResource {
 
     public DataCollect queryDataCollect() throws Exception {
         List<String> serverList = queryPathRootServerList();
-        AtomicInteger ipCount = new AtomicInteger(0), serverCount = new AtomicInteger(serverList.size()), beanCount = new AtomicInteger(0), methodCount = new AtomicInteger(0);
+        AtomicInteger ipCount = new AtomicInteger(0), serverCount = new AtomicInteger(serverList.size()),
+                beanCount = new AtomicInteger(0), methodCount = new AtomicInteger(0);
         for (String schedulerServerId : serverList) {
             List<String> ipList = queryPathRootServerIpList(schedulerServerId);
             ipCount.getAndAdd(ipList.size());
@@ -141,7 +150,7 @@ public class DcsScheduleResource {
         for (String schedulerServerId : serverList) {
             String path = StrUtil.joinStr(path_root, LINE, "server", LINE, schedulerServerId);
             String schedulerServerName = getDate(path);
-            DcsServerNode dcsServerNode = new DcsServerNode(schedulerServerId,schedulerServerName);
+            DcsServerNode dcsServerNode = new DcsServerNode(schedulerServerId, schedulerServerName);
             dcsServerNodeList.add(dcsServerNode);
         }
         return dcsServerNodeList;

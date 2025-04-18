@@ -1,13 +1,8 @@
 package cn.bugstack.middleware.whitelist.test.interfaces;
 
-/**
- * 博客：https://bugstack.cn - 沉淀、分享、成长，让自己和他人都能有所收获！
- * 公众号：bugstack虫洞栈
- * Create by 小傅哥(fustack)
- */
 class UserInfo {
 
-    //code、info可以统一定义一个类
+    // code、info可以统一定义一个类
     private String code;
     private String info;
 

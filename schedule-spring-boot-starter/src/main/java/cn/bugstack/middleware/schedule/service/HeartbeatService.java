@@ -17,11 +17,6 @@ import java.util.concurrent.TimeUnit;
 
 import static cn.bugstack.middleware.schedule.common.Constants.Global.*;
 
-/**
- * 博  客：http://bugstack.cn
- * 公众号：bugstack虫洞栈 | 沉淀、分享、成长，让自己和他人都能有所收获！
- * create by 小傅哥
- */
 public class HeartbeatService {
 
     private Logger logger = LoggerFactory.getLogger(HeartbeatService.class);
@@ -41,7 +36,7 @@ public class HeartbeatService {
 
     public void startFlushScheduleStatus() {
         ses = Executors.newScheduledThreadPool(1);
-        //300秒后，每60秒心跳一次
+        // 300秒后，每60秒心跳一次
         ses.scheduleAtFixedRate(() -> {
             try {
                 logger.info("middleware schedule heart beat On-Site Inspection task");
@@ -53,11 +48,14 @@ public class HeartbeatService {
                     for (ExecOrder execOrder : execOrderList) {
                         String taskId = execOrder.getBeanName() + "_" + execOrder.getMethodName();
                         ScheduledTask scheduledTask = scheduledTasks.get(taskId);
-                        if (null == scheduledTask) continue;
+                        if (null == scheduledTask)
+                            continue;
                         boolean cancelled = scheduledTask.isCancelled();
                         // 路径拼装
-                        String path_root_server_ip_clazz = StrUtil.joinStr(path_root_server_ip, LINE, "clazz", LINE, execOrder.getBeanName());
-                        String path_root_server_ip_clazz_method = StrUtil.joinStr(path_root_server_ip_clazz, LINE, "method", LINE, execOrder.getMethodName(), LINE, "value");
+                        String path_root_server_ip_clazz = StrUtil.joinStr(path_root_server_ip, LINE, "clazz", LINE,
+                                execOrder.getBeanName());
+                        String path_root_server_ip_clazz_method = StrUtil.joinStr(path_root_server_ip_clazz, LINE,
+                                "method", LINE, execOrder.getMethodName(), LINE, "value");
                         // 获取现有值
                         ExecOrder oldExecOrder;
                         byte[] bytes = client.getData().forPath(path_root_server_ip_clazz_method);
@@ -73,16 +71,20 @@ public class HeartbeatService {
                             oldExecOrder.setAutoStartup(execOrder.getAutoStartup());
                         }
                         oldExecOrder.setAutoStartup(!cancelled);
-                        //临时节点[数据]
+                        // 临时节点[数据]
                         if (null == Constants.Global.client.checkExists().forPath(path_root_server_ip_clazz_method))
                             continue;
                         String newJson = JSON.toJSONString(oldExecOrder);
-                        Constants.Global.client.setData().forPath(path_root_server_ip_clazz_method, newJson.getBytes(CHARSET_NAME));
-                        //永久节点[数据]
-                        String path_root_ip_server_clazz_method_status = StrUtil.joinStr(path_root_server_ip_clazz, LINE, "method", LINE, execOrder.getMethodName(), "/status");
-                        if (null == Constants.Global.client.checkExists().forPath(path_root_ip_server_clazz_method_status))
+                        Constants.Global.client.setData().forPath(path_root_server_ip_clazz_method,
+                                newJson.getBytes(CHARSET_NAME));
+                        // 永久节点[数据]
+                        String path_root_ip_server_clazz_method_status = StrUtil.joinStr(path_root_server_ip_clazz,
+                                LINE, "method", LINE, execOrder.getMethodName(), "/status");
+                        if (null == Constants.Global.client.checkExists()
+                                .forPath(path_root_ip_server_clazz_method_status))
                             continue;
-                        Constants.Global.client.setData().forPath(path_root_ip_server_clazz_method_status, (execOrder.getAutoStartup() ? "1" : "0").getBytes(CHARSET_NAME));
+                        Constants.Global.client.setData().forPath(path_root_ip_server_clazz_method_status,
+                                (execOrder.getAutoStartup() ? "1" : "0").getBytes(CHARSET_NAME));
                     }
                 }
             } catch (Exception ignore) {
@@ -92,4 +94,3 @@ public class HeartbeatService {
     }
 
 }
-

@@ -30,25 +30,19 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.Date;
 
-/**
- * 博客：https://bugstack.cn - 沉淀、分享、成长，让自己和他人都能有所收获！
- * 公众号：bugstack虫洞栈
- * Create by 小傅哥(fustack)
- */
 public class ESApiTest {
 
     public RestHighLevelClient restHighLevelClient = new RestHighLevelClient(
             RestClient.builder(
-                    new HttpHost("127.0.0.1", 9200, "http")
-            )
-    );
+                    new HttpHost("127.0.0.1", 9200, "http")));
 
     @Test
     public void test_sql() throws IOException {
 
         // 构建查询条件
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        searchSourceBuilder.query(QueryBuilders.queryStringQuery("SELECT id, userId, userNickName, userHead, userPassword, createTime from user"));
+        searchSourceBuilder.query(QueryBuilders
+                .queryStringQuery("SELECT id, userId, userNickName, userHead, userPassword, createTime from user"));
 
         // 创建查询请求对象，将查询条件配置到其中
         SearchRequest request = new SearchRequest("user");
@@ -67,7 +61,7 @@ public class ESApiTest {
      */
     @Test
     public void testCreateIndex() throws IOException {
-        //创建请求
+        // 创建请求
         CreateIndexRequest request = new CreateIndexRequest("user");
         CreateIndexResponse createIndexResponse = restHighLevelClient.indices().create(request, RequestOptions.DEFAULT);
         System.out.println(createIndexResponse);
@@ -108,7 +102,7 @@ public class ESApiTest {
         User user_01 = new User();
         user_01.setId(1L);
         user_01.setUserId("184172133");
-        user_01.setUserNickName("小傅哥");
+        user_01.setUserNickName("Shannon");
         user_01.setUserHead("01_50");
         user_01.setUserPassword("123456");
         user_01.setCreateTime(new Date());
@@ -158,7 +152,7 @@ public class ESApiTest {
      */
     @Test
     public void testExistDocument() throws IOException {
-        //bugstack 索引中     是否存在 1 的文档
+        // bugstack 索引中 是否存在 1 的文档
         GetRequest getRequest = new GetRequest("bugstack", "1");
         boolean exists = restHighLevelClient.exists(getRequest, RequestOptions.DEFAULT);
         System.out.println(exists);
@@ -187,7 +181,7 @@ public class ESApiTest {
         User user = new User();
         user.setId(1L);
         user.setUserId("184172133");
-        user.setUserNickName("小傅哥");
+        user.setUserNickName("Shannon");
         user.setUserHead("01_50");
         user.setUserPassword("123456");
         user.setCreateTime(new Date());
@@ -215,9 +209,9 @@ public class ESApiTest {
     @Test
     public void testSearchDocument() throws IOException {
         SearchRequest searchRequest = new SearchRequest("bugstack");
-        //匹配字段
+        // 匹配字段
         MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery("name", "张飞");
-        //构建查询器
+        // 构建查询器
         searchRequest.source(new SearchSourceBuilder().query(matchQueryBuilder));
         SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
         System.out.println(searchResponse.getHits().getTotalHits());

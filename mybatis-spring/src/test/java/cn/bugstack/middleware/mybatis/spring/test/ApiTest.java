@@ -15,11 +15,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.Map;
 
-/**
- * 博客：https://bugstack.cn - 沉淀、分享、成长，让自己和他人都能有所收获！
- * 公众号：bugstack虫洞栈
- * Create by 小傅哥(fustack)
- */
 public class ApiTest {
 
     private Logger logger = LoggerFactory.getLogger(ApiTest.class);
@@ -37,7 +32,7 @@ public class ApiTest {
         Reader reader = Resources.getResourceAsReader("application.yml");
         Map map = (Map) new Yaml().load(reader);
         System.out.println(map.toString());
-        System.out.println(((Map)((Map)map.get("mybatis")).get("datasource")).get("basePackage"));
+        System.out.println(((Map) ((Map) map.get("mybatis")).get("datasource")).get("basePackage"));
     }
 
 }

@@ -20,13 +20,8 @@ import org.springframework.core.type.AnnotationMetadata;
 
 import javax.annotation.Resource;
 
-/**
- * 博客：https://bugstack.cn - 沉淀、分享、成长，让自己和他人都能有所收获！
- * 公众号：bugstack虫洞栈
- * Create by 小傅哥(fustack)
- */
 @Configuration
-@ConditionalOnClass({SqlSessionFactory.class})
+@ConditionalOnClass({ SqlSessionFactory.class })
 @EnableConfigurationProperties(ESIBatisProperties.class)
 public class EsIBatisAutoConfiguration implements InitializingBean {
 
@@ -39,12 +34,14 @@ public class EsIBatisAutoConfiguration implements InitializingBean {
         return new SqlSessionFactoryBuilder().build(esiBatisProperties);
     }
 
-    public static class AutoConfiguredMapperScannerRegistrar implements EnvironmentAware, ImportBeanDefinitionRegistrar {
+    public static class AutoConfiguredMapperScannerRegistrar
+            implements EnvironmentAware, ImportBeanDefinitionRegistrar {
 
         private String basePackage;
 
         @Override
-        public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
+        public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata,
+                BeanDefinitionRegistry registry) {
             BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(MapperScannerConfigurer.class);
             builder.addPropertyValue("basePackage", basePackage);
             registry.registerBeanDefinition(MapperScannerConfigurer.class.getName(), builder.getBeanDefinition());
@@ -59,7 +56,7 @@ public class EsIBatisAutoConfiguration implements InitializingBean {
 
     @Configuration
     @Import(AutoConfiguredMapperScannerRegistrar.class)
-    @ConditionalOnMissingBean({MapperFactoryBean.class, MapperScannerConfigurer.class})
+    @ConditionalOnMissingBean({ MapperFactoryBean.class, MapperScannerConfigurer.class })
     public static class MapperScannerRegistrarNotFoundConfiguration implements InitializingBean {
 
         @Override

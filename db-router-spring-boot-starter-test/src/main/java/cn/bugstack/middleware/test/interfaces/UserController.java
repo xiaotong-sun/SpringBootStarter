@@ -13,11 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
-/**
- * 博客：https://bugstack.cn - 沉淀、分享、成长，让自己和他人都能有所收获！
- * 公众号：bugstack虫洞栈
- * Create by 小傅哥(fustack)
- */
 @RestController
 public class UserController {
 
@@ -27,7 +22,7 @@ public class UserController {
     private IUserDao userDao;
 
     @RequestMapping(path = "/api/queryUserInfoById", method = RequestMethod.GET)
-    public User queryUserInfoById(){
+    public User queryUserInfoById() {
         return userDao.queryUserInfoByUserId(new User("980765512"));
     }
 

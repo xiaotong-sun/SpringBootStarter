@@ -17,11 +17,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * 公众号 | bugstack虫洞栈
- * 博 客 | https://bugstack.cn
- * Create by 小傅哥
- */
 public class SqlSessionFactoryBuilder {
 
     public DefaultSqlSessionFactory build(Connection connection, String packageSearchPath) throws Exception {
@@ -43,7 +38,7 @@ public class SqlSessionFactoryBuilder {
     private Map<String, XNode> mapperElement(List<Element> list) {
         Map<String, XNode> map = new HashMap<>();
         for (Element root : list) {
-            //命名空间
+            // 命名空间
             String namespace = root.attributeValue("namespace");
             // SELECT
             List<Element> selectNodes = root.selectNodes("select");

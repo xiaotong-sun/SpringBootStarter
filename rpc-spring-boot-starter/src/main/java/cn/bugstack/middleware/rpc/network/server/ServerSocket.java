@@ -16,18 +16,13 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import org.springframework.context.ApplicationContext;
 
-/**
- * 博  客：http://bugstack.cn
- * 公众号：bugstack虫洞栈 | 沉淀、分享、成长，让自己和他人都能有所收获！
- * create by 小傅哥
- */
 public class ServerSocket implements Runnable {
 
     private ChannelFuture f;
 
     private transient ApplicationContext applicationContext;
 
-    public ServerSocket(ApplicationContext applicationContext){
+    public ServerSocket(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
 
@@ -62,14 +57,14 @@ public class ServerSocket implements Runnable {
                         }
                     });
 
-            //启动初始端口
+            // 启动初始端口
             int port = 22201;
             while (NetUtil.isPortUsing(port)) {
                 port++;
             }
             LocalServerInfo.LOCAL_HOST = NetUtil.getHost();
             LocalServerInfo.LOCAL_PORT = port;
-            //注册服务
+            // 注册服务
             this.f = b.bind(port).sync();
             this.f.channel().closeFuture().sync();
 

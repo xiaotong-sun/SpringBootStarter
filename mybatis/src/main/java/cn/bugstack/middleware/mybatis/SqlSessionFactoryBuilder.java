@@ -16,11 +16,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * 公众号 | bugstack虫洞栈
- * 博 客 | https://bugstack.cn
- * Create by 小傅哥
- */
 public class SqlSessionFactoryBuilder {
 
     public DefaultSqlSessionFactory build(Reader reader) {
@@ -60,7 +55,8 @@ public class SqlSessionFactoryBuilder {
     private Connection connection(Map<String, String> dataSource) {
         try {
             Class.forName(dataSource.get("driver"));
-            return DriverManager.getConnection(dataSource.get("url"), dataSource.get("username"), dataSource.get("password"));
+            return DriverManager.getConnection(dataSource.get("url"), dataSource.get("username"),
+                    dataSource.get("password"));
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
@@ -82,7 +78,7 @@ public class SqlSessionFactoryBuilder {
                 SAXReader saxReader = new SAXReader();
                 Document document = saxReader.read(new InputSource(reader));
                 Element root = document.getRootElement();
-                //命名空间
+                // 命名空间
                 String namespace = root.attributeValue("namespace");
 
                 // SELECT
@@ -111,7 +107,7 @@ public class SqlSessionFactoryBuilder {
                     xNode.setResultType(resultType);
                     xNode.setSql(sql);
                     xNode.setParameter(parameter);
-                    
+
                     map.put(namespace + "." + id, xNode);
                 }
             } catch (Exception ex) {

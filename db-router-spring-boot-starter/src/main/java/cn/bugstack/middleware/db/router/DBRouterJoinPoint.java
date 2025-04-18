@@ -17,11 +17,6 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 
-/**
- * 博客：https://bugstack.cn - 沉淀、分享、成长，让自己和他人都能有所收获！
- * 公众号：bugstack虫洞栈
- * Create by 小傅哥(fustack)
- */
 @Aspect
 @Component("db-router-point")
 public class DBRouterJoinPoint {
@@ -38,7 +33,8 @@ public class DBRouterJoinPoint {
     @Around("aopPoint() && @annotation(dbRouter)")
     public Object doRouter(ProceedingJoinPoint jp, DBRouter dbRouter) throws Throwable {
         String dbKey = dbRouter.key();
-        if (StringUtils.isBlank(dbKey)) throw new RuntimeException("annotation DBRouter key is null！");
+        if (StringUtils.isBlank(dbKey))
+            throw new RuntimeException("annotation DBRouter key is null！");
         // 计算路由
         String dbKeyAttr = getAttrValue(dbKey, jp.getArgs());
         int size = dbRouterConfig.getDbCount() * dbRouterConfig.getTbCount();
@@ -70,7 +66,8 @@ public class DBRouterJoinPoint {
         String filedValue = null;
         for (Object arg : args) {
             try {
-                if (StringUtils.isNotBlank(filedValue)) break;
+                if (StringUtils.isNotBlank(filedValue))
+                    break;
                 filedValue = BeanUtils.getProperty(arg, attr);
             } catch (Exception e) {
                 logger.error("获取路由属性值失败 attr：{}", attr, e);

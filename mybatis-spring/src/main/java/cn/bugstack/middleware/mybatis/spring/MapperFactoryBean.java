@@ -10,11 +10,6 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
-/**
- * 博  客：http://bugstack.cn
- * 公众号：bugstack虫洞栈 | 沉淀、分享、成长，让自己和他人都能有所收获！
- * create by 小傅哥
- */
 public class MapperFactoryBean<T> implements FactoryBean<T> {
 
     private Logger logger = LoggerFactory.getLogger(MapperFactoryBean.class);
@@ -31,16 +26,19 @@ public class MapperFactoryBean<T> implements FactoryBean<T> {
     public T getObject() throws Exception {
         InvocationHandler handler = (proxy, method, args) -> {
             logger.info("你被代理了，执行SQL操作！{}", method.getName());
-            if ("toString".equals(method.getName())) return null; // 排除Object方法
+            if ("toString".equals(method.getName()))
+                return null; // 排除Object方法
             try {
-                return sqlSessionFactory.openSession().selectOne(mapperInterface.getName() + "." + method.getName(), args[0]);
+                return sqlSessionFactory.openSession().selectOne(mapperInterface.getName() + "." + method.getName(),
+                        args[0]);
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
             return method.getReturnType().newInstance();
         };
-        return (T) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class[]{mapperInterface}, handler);
+        return (T) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
+                new Class[] { mapperInterface }, handler);
     }
 
     @Override

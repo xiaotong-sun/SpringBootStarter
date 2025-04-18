@@ -4,17 +4,11 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
-/**
- * 博  客：http://bugstack.cn
- * 公众号：bugstack虫洞栈 | 沉淀、分享、成长，让自己和他人都能有所收获！
- * create by 小傅哥
- * redis 模拟RPC注册中心
- */
 public class RedisRegistryCenter {
 
-    private static Jedis jedis;   //非切片额客户端连接
+    private static Jedis jedis; // 非切片额客户端连接
 
-    //初始化redis
+    // 初始化redis
     public static void init(String host, int port) {
         // 池基本配置
         JedisPoolConfig config = new JedisPoolConfig();
@@ -39,6 +33,7 @@ public class RedisRegistryCenter {
     /**
      * 获取生产者
      * 模拟权重，随机获取
+     * 
      * @param nozzle 接口名称
      */
     public static String obtainProvider(String nozzle, String alias) {

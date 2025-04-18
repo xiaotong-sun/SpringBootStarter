@@ -6,11 +6,6 @@ import cn.bugstack.middleware.rpc.network.future.SyncWriteFuture;
 import cn.bugstack.middleware.rpc.network.future.SyncWriteMap;
 import cn.bugstack.middleware.rpc.network.msg.Response;
 
-/**
- * 博  客：http://bugstack.cn
- * 公众号：bugstack虫洞栈 | 沉淀、分享、成长，让自己和他人都能有所收获！
- * create by 小傅哥
- */
 public class MyClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override

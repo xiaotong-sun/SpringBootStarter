@@ -1,19 +1,13 @@
 package cn.bugstack.middleware.schedule.domain;
 
-/**
- * 执行指令，用于调度任务
- * 博  客：http://bugstack.cn
- * 公众号：bugstack虫洞栈 | 沉淀、分享、成长，让自己和他人都能有所收获！
- * create by 小傅哥
- */
 public class Instruct {
 
-    private String ip;                  //机器IP
-    private String schedulerServerId;   //任务服务ID；工程名称En
-    private String beanName;            //类对象名称
-    private String methodName;          //方法名称
-    private String cron;                //任务执行
-    private Integer status;             //Constants.InstructStatus 0关闭、1启动、2更新
+    private String ip; // 机器IP
+    private String schedulerServerId; // 任务服务ID；工程名称En
+    private String beanName; // 类对象名称
+    private String methodName; // 方法名称
+    private String cron; // 任务执行
+    private Integer status; // Constants.InstructStatus 0关闭、1启动、2更新
 
     public String getIp() {
         return ip;

@@ -6,12 +6,6 @@ import java.sql.*;
 import java.util.Date;
 import java.util.*;
 
-
-/**
- * 公众号 | bugstack虫洞栈
- * 博 客 | https://bugstack.cn
- * Create by 小傅哥
- */
 public class DefaultSqlSession implements SqlSession {
 
     private Connection connection;
@@ -80,7 +74,8 @@ public class DefaultSqlSession implements SqlSession {
         return null;
     }
 
-    private void buildParameter(PreparedStatement preparedStatement, Object parameter, Map<Integer, String> parameterMap) throws SQLException, IllegalAccessException {
+    private void buildParameter(PreparedStatement preparedStatement, Object parameter,
+            Map<Integer, String> parameterMap) throws SQLException, IllegalAccessException {
 
         int size = parameterMap.size();
         // 单个参数
@@ -178,7 +173,8 @@ public class DefaultSqlSession implements SqlSession {
 
     @Override
     public void close() {
-        if (null == connection) return;
+        if (null == connection)
+            return;
         try {
             connection.close();
         } catch (SQLException e) {

@@ -17,18 +17,13 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * 博客：https://bugstack.cn - 沉淀、分享、成长，让自己和他人都能有所收获！
- * 公众号：bugstack虫洞栈
- * Create by 小傅哥(fustack)
- */
 @Configuration
 public class DataSourceAutoConfig implements EnvironmentAware {
 
     private Map<String, Map<String, Object>> dataSourceMap = new HashMap<>();
 
-    private int dbCount;  //分库数
-    private int tbCount;  //分表数
+    private int dbCount; // 分库数
+    private int tbCount; // 分表数
 
     @Bean
     public DBRouterConfig dbRouterConfig() {
@@ -41,7 +36,8 @@ public class DataSourceAutoConfig implements EnvironmentAware {
         Map<Object, Object> targetDataSources = new HashMap<>();
         for (String dbInfo : dataSourceMap.keySet()) {
             Map<String, Object> objMap = dataSourceMap.get(dbInfo);
-            targetDataSources.put(dbInfo, new DriverManagerDataSource(objMap.get("url").toString(), objMap.get("username").toString(), objMap.get("password").toString()));
+            targetDataSources.put(dbInfo, new DriverManagerDataSource(objMap.get("url").toString(),
+                    objMap.get("username").toString(), objMap.get("password").toString()));
         }
         // 设置数据源
         DynamicDataSource dynamicDataSource = new DynamicDataSource();

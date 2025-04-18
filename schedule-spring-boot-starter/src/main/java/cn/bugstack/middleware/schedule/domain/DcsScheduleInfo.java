@@ -1,20 +1,15 @@
 package cn.bugstack.middleware.schedule.domain;
 
-/**
- * 博  客：http://bugstack.cn
- * 公众号：bugstack虫洞栈 | 沉淀、分享、成长，让自己和他人都能有所收获！
- * create by 小傅哥
- */
 public class DcsScheduleInfo {
 
-    private String ip;                      //机器IP
-    private String schedulerServerId;       //任务服务ID；  工程名称En
-    private String schedulerServerName;     //任务服务名称；工程名称Ch
-    private String beanName;                //类对象名称
-    private String methodName;              //方法名称
-    private String desc;                    //任务描述
-    private String cron;                    //任务执行
-    private Integer status;                 //任务状态；0关闭、1开启、2宕机
+    private String ip; // 机器IP
+    private String schedulerServerId; // 任务服务ID； 工程名称En
+    private String schedulerServerName; // 任务服务名称；工程名称Ch
+    private String beanName; // 类对象名称
+    private String methodName; // 方法名称
+    private String desc; // 任务描述
+    private String cron; // 任务执行
+    private Integer status; // 任务状态；0关闭、1开启、2宕机
 
     public String getIp() {
         return ip;

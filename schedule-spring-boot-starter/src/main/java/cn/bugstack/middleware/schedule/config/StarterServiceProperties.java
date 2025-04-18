@@ -2,17 +2,12 @@ package cn.bugstack.middleware.schedule.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-/**
- * 博  客：http://bugstack.cn
- * 公众号：bugstack虫洞栈 | 沉淀、分享、成长，让自己和他人都能有所收获！
- * create by 小傅哥
- */
 @ConfigurationProperties("bugstack.middleware.scheudle")
 public class StarterServiceProperties {
 
-    private String zkAddress;           //zookeeper服务地址；x.x.x.x:2181
-    private String schedulerServerId;   //任务服务ID；  工程名称En
-    private String schedulerServerName; //任务服务名称；工程名称Ch
+    private String zkAddress; // zookeeper服务地址；x.x.x.x:2181
+    private String schedulerServerId; // 任务服务ID； 工程名称En
+    private String schedulerServerName; // 任务服务名称；工程名称Ch
 
     public String getZkAddress() {
         return zkAddress;

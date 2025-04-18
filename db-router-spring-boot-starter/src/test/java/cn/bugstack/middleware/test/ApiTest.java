@@ -6,11 +6,6 @@ import org.junit.Test;
 import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.Method;
 
-/**
- * 博客：https://bugstack.cn - 沉淀、分享、成长，让自己和他人都能有所收获！
- * 公众号：bugstack虫洞栈
- * Create by 小傅哥(fustack)
- */
 public class ApiTest {
 
     public static void main(String[] args) {
@@ -19,7 +14,7 @@ public class ApiTest {
 
     @Test
     public void test_db_hash() {
-        String key = "小傅哥";
+        String key = "Snannon Sun";
 
         int dbCount = 2, tbCount = 32;
         int size = dbCount * tbCount;
@@ -54,5 +49,3 @@ public class ApiTest {
     }
 
 }
-
-

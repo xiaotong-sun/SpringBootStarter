@@ -15,11 +15,6 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * 公众号 | bugstack虫洞栈
- * 博 客 | https://bugstack.cn
- * Create by 小傅哥
- */
 public class SqlSessionFactoryBuilder {
 
     public DefaultSqlSessionFactory build(ESIBatisProperties esiBatisProperties) throws Exception {
@@ -47,7 +42,7 @@ public class SqlSessionFactoryBuilder {
             Document document = saxReader.read(new InputSource(reader));
             Element root = document.getRootElement();
 
-            //命名空间
+            // 命名空间
             String namespace = root.attributeValue("namespace");
 
             // SELECT

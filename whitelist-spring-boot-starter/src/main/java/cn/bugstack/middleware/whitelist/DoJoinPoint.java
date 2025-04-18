@@ -17,11 +17,6 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.lang.reflect.Method;
 
-/**
- * 博客：https://bugstack.cn - 沉淀、分享、成长，让自己和他人都能有所收获！
- * 公众号：bugstack虫洞栈
- * Create by 小傅哥(fustack)
- */
 @Aspect
 @Component
 public class DoJoinPoint {
@@ -44,7 +39,8 @@ public class DoJoinPoint {
         // 获取字段值
         String keyValue = getFiledValue(whiteList.key(), jp.getArgs());
         logger.info("middleware whitelist handler method：{} value：{}", method.getName(), keyValue);
-        if (null == keyValue || "".equals(keyValue)) return jp.proceed();
+        if (null == keyValue || "".equals(keyValue))
+            return jp.proceed();
 
         String[] split = whiteListConfig.split(",");
 
@@ -66,7 +62,8 @@ public class DoJoinPoint {
     }
 
     // 返回对象
-    private Object returnObject(DoWhiteList whiteList, Method method) throws IllegalAccessException, InstantiationException {
+    private Object returnObject(DoWhiteList whiteList, Method method)
+            throws IllegalAccessException, InstantiationException {
         Class<?> returnType = method.getReturnType();
         String returnJson = whiteList.returnJson();
         if ("".equals(returnJson)) {

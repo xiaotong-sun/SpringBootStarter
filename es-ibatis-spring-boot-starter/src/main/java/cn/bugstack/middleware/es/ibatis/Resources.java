@@ -5,11 +5,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
-/**
- * 公众号 | bugstack虫洞栈
- * 博 客 | https://bugstack.cn
- * Create by 小傅哥
- */
 public class Resources {
 
     public static Reader getResourceAsReader(String resource) throws IOException {
@@ -28,9 +23,9 @@ public class Resources {
     }
 
     private static ClassLoader[] getClassLoaders() {
-        return new ClassLoader[]{
+        return new ClassLoader[] {
                 ClassLoader.getSystemClassLoader(),
-                Thread.currentThread().getContextClassLoader()};
+                Thread.currentThread().getContextClassLoader() };
     }
 
 }

@@ -1,14 +1,9 @@
 package cn.bugstack.middleware.schedule.domain;
 
-/**
- * 博  客：http://bugstack.cn
- * 公众号：bugstack虫洞栈 | 沉淀、分享、成长，让自己和他人都能有所收获！
- * create by 小傅哥
- */
 public class DcsServerNode {
 
-    private String schedulerServerId;       //任务服务ID；  工程名称En
-    private String schedulerServerName;     //任务服务名称；工程名称Ch
+    private String schedulerServerId; // 任务服务ID； 工程名称En
+    private String schedulerServerName; // 任务服务名称；工程名称Ch
 
     public DcsServerNode(String schedulerServerId, String schedulerServerName) {
         this.schedulerServerId = schedulerServerId;

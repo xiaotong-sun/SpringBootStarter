@@ -21,7 +21,7 @@ public class ApiTest {
 
     @Test
     public void test_set() {
-        redisService.set("key_info_user", "小傅哥，一个并不简单的男人！");
+        redisService.set("key_info_user", "Shannon，一个并不简单的男人！");
     }
 
     @Test
